@@ -333,11 +333,16 @@ class InteractionComplex:
                 other in sequence
         """
         self._make_selection(user_selections)
-        logging.debug('Completed new NeighbourSearch.')
+        logging.debug("Completed new NeighbourSearch.")
 
-        self._calculate_atom_contacts(interacting_cutoff, vdw_comp, include_sequence_adjacent)
+        self._calculate_atom_contacts(
+            interacting_cutoff, vdw_comp, include_sequence_adjacent
+        )
+        logging.debug("Completed atom contacts search.")
         self._calculate_ring_contacts()
+        logging.debug("Completed ring contacts search.")
         self._calculate_group_contacts()
+        logging.debug("Completed group contacts search.")
 
     def write_atom_sifts(self, wd):
         """Write out per-atom SIFTS. Files: '_sifts' and '_specific_sifts'
