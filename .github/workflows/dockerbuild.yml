@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push on tag
-        if: ${{ GITHUB_REF == 'refs/tags/'* }}
+        if: ${{ contains(env.GITHUB_REF, 'tags') }}
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -44,7 +44,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.TAG }}
       -
         name: Build and push on push
-        if: ${{ GITHUB_REF != 'refs/tags/'* }}
+        if: ${{ !contains(env.GITHUB_REF, 'tags') }}
         id: docker_build
         uses: docker/build-push-action@v2
         with:
