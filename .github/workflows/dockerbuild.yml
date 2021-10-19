@@ -16,10 +16,11 @@ jobs:
         name: Get tags
         id: gen_tags
         run: |
-          SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
+          echo $GITHUB_REF
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
             TAG=${GITHUB_REF/refs\/tags\//}
           fi
+          SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
           echo '::set-output name=SHORT_SHA::'$SHORT_SHA
           echo '::set-output name=TAG::'$TAG
       -
