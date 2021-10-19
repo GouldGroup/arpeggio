@@ -18,9 +18,9 @@ jobs:
         run: |
           SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:'${GITHUB_REF/refs\/tags\//}'", "${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
+            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:'${GITHUB_REF/refs\/tags\//}'","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
           else
-            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest", "${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
+            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
           fi
           echo '::set-output name=tags::'$TAGS
       -
