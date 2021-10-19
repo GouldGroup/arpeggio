@@ -32,7 +32,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push on tag
+        if: ${{ steps.gen_tags.outputs.TAG != "" }}
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -41,3 +42,13 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.SHORT_SHA }}
             ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.TAG }}
+      -
+        name: Build and push on push
+        if: ${{ steps.gen_tags.outputs.TAG == "" }}
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.SHORT_SHA }}
