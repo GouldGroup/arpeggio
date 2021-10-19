@@ -17,6 +17,7 @@ jobs:
         id: gen_tags
         run: |
           echo $GITHUB_REF
+          echo $
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
             TAG=${GITHUB_REF/refs\/tags\//}
           fi
@@ -35,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push on tag
-        if: contains(env.GITHUB_REF, 'tags')
+        if: startsWith(github.ref, 'refs/tags/')
         id: docker_build_tag
         uses: docker/build-push-action@v2
         with:
@@ -46,7 +47,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.TAG }}
       -
         name: Build and push on push
-        if: "!contains(env.GITHUB_REF, 'tags')"
+        if: startsWith(github.ref, 'refs/heads/')
         id: docker_build_push
         uses: docker/build-push-action@v2
         with:
