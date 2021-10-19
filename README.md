@@ -1,5 +1,9 @@
 # Disclaimer
 
+The Gould Group fork mainly fixed the [openbabel<>biopython index mapping issue](https://github.com/PDBeurope/arpeggio/issues/4#issuecomment-864424023). Also added the option to save the resulting json file in bz2 compressed format.
+
+---
+
 This is a slightly refactored version of the original code by Harry Jubb. Main changes are:
 
 * Python 3 support
