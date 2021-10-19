@@ -21,6 +21,7 @@ jobs:
             TAG=${GITHUB_REF/refs\/tags\//}
           fi
           SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
+
           echo '::set-output name=SHORT_SHA::'$SHORT_SHA
           echo '::set-output name=TAG::'$TAG
       -
