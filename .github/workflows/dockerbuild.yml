@@ -18,11 +18,10 @@ jobs:
         run: |
           SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
           if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
-            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:'${GITHUB_REF/refs\/tags\//}'","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
-          else
-            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
+            TAG=${GITHUB_REF/refs\/tags\//}
           fi
-          echo '::set-output name=tags::'$TAGS
+          echo '::set-output name=SHORT_SHA::'$SHORT_SHA
+          echo '::set-output name=TAG::'$TAG
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -38,4 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ steps.gen_tags.outputs.tags }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.SHORT_SHA }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${{ steps.gen_tags.outputs.TAG }}
