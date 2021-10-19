@@ -51,6 +51,7 @@ def create_parser():
     parser.add_argument('-a', '--use-ambiguities', action='store_true', help='Turn on abiguous definitions for ambiguous contacts.')
     parser.add_argument('-o', '--output', default=None, help='Define output directory.')
     parser.add_argument('-m', '--mute', action='store_true', help='Silent mode without debug info.')
+    parser.add_argument('-b', '--bz2', action='store_true', help='Save bz2 compressed json file as output.')
 
     return parser
 
@@ -106,10 +107,19 @@ def run_arpeggio(args):
     contacts = i_complex.get_contacts()
 
     json_name = os.path.basename(args.filename).split('.')[0]
-    path = os.path.join(args.output, f'{json_name}.json')
 
-    with open(path, 'w') as fp:
-        json.dump(contacts, fp, indent=4, sort_keys=True)
+    if args.bz2:
+        import bz2
+        path = os.path.join(args.output, f'{json_name}.json.bz2')
+
+        with bz2.open(path, 'wb') as fp:
+            json_bytes = json.dumps(contacts, indent=4, sort_keys=True).encode('utf-8')
+            fp.write(json_bytes)
+    else:
+        path = os.path.join(args.output, f'{json_name}.json')
+
+        with open(path, 'w') as fp:
+            json.dump(contacts, fp, indent=4, sort_keys=True)
 
     # write out files
     #i_complex.write_atom_types(args.output)  # _atomtypes
