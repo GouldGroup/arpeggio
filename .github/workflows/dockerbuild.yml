@@ -1,0 +1,39 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - 'master'
+  tags: '*'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Get tags
+        id: gen_tags
+        run: |
+          SHORT_SHA=$(echo $GITHUB_SHA | head -c7)
+          if [[ $GITHUB_REF == 'refs/tags/'* ]]; then
+            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest","${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:'${GITHUB_REF/refs\/tags\//}'", "${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
+          else
+            TAGS='["${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:latest", "${{ secrets.DOCKERHUB_USERNAME }}/arpeggio:${SHORT_SHA}"]'
+          fi
+          echo '::set-output name=tags::'$TAGS
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ fromJson(steps.gen_tags.outputs.tags) }}
