@@ -48,7 +48,7 @@ The easiest way to set up with Arpeggio is using [Conda](https://docs.conda.io/e
 
 ```bash
 conda install -c openbabel openbabel
-pip install git+https://github.com/PDBeurope/arpeggio.git@master#egg=arpeggio
+pip install git+https://github.com/GouldGroup/arpeggio.git@master#egg=arpeggio
 ```
 
 To create conda environment please use e.g. the following command:
