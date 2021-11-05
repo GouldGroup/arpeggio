@@ -54,7 +54,7 @@ pip install git+https://github.com/GouldGroup/arpeggio.git@master#egg=arpeggio
 To create conda environment please use e.g. the following command:
 
 ```bash
-conda create -n arpeggio-env python=3.7
+conda create -n arpeggio python=3.7
 ```
 
 and activate it:
